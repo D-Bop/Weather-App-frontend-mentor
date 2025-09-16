@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <link rel="stylesheet" href="./css/style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
         <nav>
@@ -14,7 +18,7 @@
                 <button><img src="./assets/images/icon-units.svg" alt=""> Units <img src="./assets/images/icon-dropdown.svg" alt=""></button>
 
                 <div class="content">
-                    <p><span>Switch to imperial</span></p>
+                    <button>Switch to imperial</button>
 
                     <div class="temperature">
                         <p>Temperature</p>
@@ -24,17 +28,17 @@
                         </div>
                     </div>
 
-                    <div class="wind-speed">
+                    <div class="temperature">
                         <p>Wind Speed</p>
-                        <div class="speed">
+                        <div class="temps">
                             <p>Km/h</p>
                             <p>mph</p>
                         </div>
                     </div>
 
-                    <div class="Precipitation">
+                    <div class="temperature">
                         <p>Precipitation</p>
-                        <div class="precip">
+                        <div class="temps">
                             <p>Milimeters (mm)</p>
                             <p>Inches (in)</p>
                         </div>
@@ -42,6 +46,16 @@
                 </div>
             </div>
         </nav>
+
+        <header> <h1>How's the sky looking today?</h1> </header>
+
+        <main>
+            <div class="search">
+                <img src="./assets/images/icon-search.svg" alt="">
+                <input  type="text" placeholder= "Search for a place...">
+                <button>Search</button>
+            </div>
+        </main>
         
 
 
