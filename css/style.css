@@ -379,7 +379,6 @@ header > h1{
 
     .search {
         margin-top: 2em;
-        background-color: thistle;
         width: 100%;
         grid-template-columns: 2fr 1fr;
         display: flex;
@@ -417,7 +416,6 @@ header > h1{
         background-position: center;
         /* background-size: contain; */
         padding: 20px;
-        background-color: aqua;
         margin-top: 4em;
         display: flex;
         flex-direction: column;
@@ -449,7 +447,7 @@ header > h1{
     }
 
     .wind-details {
-        width: 95%;
+        width: 96%;
         grid-template-columns: 50% 50%;
         grid-gap: 1em;
     }
@@ -457,12 +455,12 @@ header > h1{
     .forecast {
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 1em;
-        width: 95%;
+        width: 99%;
     }
 
     .section-B {
         margin-top: 2em;
-        width: 82%;
+        width: 87%;
     }
 
     .hourly-details {
