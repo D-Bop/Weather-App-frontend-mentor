@@ -20,6 +20,7 @@ nav {
 .dropdown {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .dropdown > button {
@@ -42,10 +43,13 @@ button > img {
     width: 214px;
     height: 412px;
     padding: 6px 8px;
-    /* text-align: center; */
     border-radius: 12px;
     margin-top: 10px;
     display: none;
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    z-index: 1000;
 }
 
 .content > button {
@@ -80,18 +84,20 @@ header > h1{
     font-family:  Bricolage Grotesque, sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    /* letter-spacing: 1px; */
+    letter-spacing: 1px;
+    /* width: 150%; */
 }
 
 .search {
     margin: auto;
     text-align: center;
-    width: 50%;
+    width: 40%;
     display: grid;
     grid-template-columns: 3fr 1fr;
     grid-column-gap: 1em;
     /* background-color: indianred; */
     height: 56px;
+    margin-top: 2em;
 }
 
 .search-bar {
@@ -310,12 +316,32 @@ header > h1{
     display: flex;
     justify-content: space-between;
 }
-
+.hourly-forecast {
+    position: relative;
+}
 .hourly-forecast > .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-} 
+}
+
+.hourly-forecast-btn {
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    position: relative;
+}
+
+.days-dropdown {
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1000%;
+    top: 2em;
+    display: none;
+}
 
 .header > button {
     background-color: hsl(243, 23%, 24%);
@@ -557,4 +583,8 @@ header > h1{
     .hourly-details {
         margin-top: 1em;
     }
+}
+
+.hide {
+    display: block;
 }
