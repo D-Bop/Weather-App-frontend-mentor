@@ -1,5 +1,9 @@
 console.log("Script loaded");
 const city = document.querySelector(".city")
+const temperature = document.querySelectorAll(".temp-display") 
+const humidity = document.querySelector(".humidity")
+const windSpeed = document.querySelector(".wind-speed")
+const precipitation = document.querySelector(".precipitation")
 const dropDownContent = document.querySelector(".content")
 const daysList = document.querySelector(".days-dropdown")
 const date = document.querySelector(".date")
@@ -35,9 +39,7 @@ const getWeatherData = async() => {
             }
         );
         const weatherData = await weatherDataFetch.json();
-        console.log(weatherData.latitude) 
-        console.log(weatherData.longitude) 
-        // console.log(weatherData.current.wind_speed_10m)
+        console.log(weatherData) 
 
         // reverse geocoding to get city name from lat and long
         const geoCodeUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${weatherData.latitude}&lon=${weatherData.longitude}`;
@@ -49,7 +51,16 @@ const getWeatherData = async() => {
 
         const geoCodeData = await geocodeResponse.json();
         console.log(geoCodeData);
+        // displaying api data on the page
         city.innerHTML = `${geoCodeData.address.city || geoCodeData.address.town || geoCodeData.address.village || "Unknown Location"}, ${geoCodeData.address.country}`;
+        temperature.forEach ((temp) => { 
+            console.log(temp)
+            temp.innerHTML = `${Math.round(weatherData.current.temperature_2m)}°`
+        });
+        humidity.innerHTML = `${weatherData.current.relative_humidity_2m}${weatherData.current_units.relative_humidity_2m}`
+        windSpeed.innerHTML = `${Math.round(weatherData.current.wind_speed_10m)} ${weatherData.current_units.wind_speed_10m}`
+        precipitation.innerHTML = `${weatherData.current.precipitation} ${weatherData.current_units.precipitation}`
+        
     }
     catch (error) {
         console.log(error)

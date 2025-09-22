@@ -220,12 +220,14 @@ header > h1{
 }
 
 .weather {
+    display: flex;
     /* background-color: tomato; */
     justify-self: center;
     align-self: center;
+    align-items: center;
     display: grid;
-    grid-template-columns: 5% 50%;
-    grid-gap: 5em;
+    grid-template-columns: 30% 70%;
+    grid-gap: 4em;
     width: 100%;
 }
 
@@ -239,9 +241,10 @@ header > h1{
 
 .weather > h1 {
     /* background-color: lightgreen; */
+    /* margin-right: 2em; */
     font-family: Bricolage Grotesque, sans-serif;
     font-weight: 300;
-    font-size: 5em;
+    font-size: 4em;
 }
 
 .wind-details {
