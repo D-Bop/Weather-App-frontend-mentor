@@ -1,5 +1,5 @@
 console.log("Script loaded");
-
+const city = document.querySelector(".city")
 const dropDownContent = document.querySelector(".content")
 const daysList = document.querySelector(".days-dropdown")
 const date = document.querySelector(".date")
@@ -27,19 +27,32 @@ function daysDropDown() {
 const getWeatherData = async() => {
     try {
         const cityName = document.querySelector(".search-bar").value;
-        const WeatherDataFetch = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m`, 
+        const weatherDataFetch = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=6.4541&longitude=3.3947&daily=temperature_2m_max,temperature_2m_min&hourly=temperature_2m,wind_speed_10m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain,showers,snowfall&current=wind_speed_10m,snowfall,showers,rain,relative_humidity_2m,precipitation,temperature_2m`, 
             {
                 headers: {
                     Accept: "application/json"
                 }
             }
         );
-        const weatherData = await WeatherDataFetch.json();
-        console.log(weatherData) 
-              
+        const weatherData = await weatherDataFetch.json();
+        console.log(weatherData.latitude) 
+        console.log(weatherData.longitude) 
+        // console.log(weatherData.current.wind_speed_10m)
+
+        // reverse geocoding to get city name from lat and long
+        const geoCodeUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${weatherData.latitude}&lon=${weatherData.longitude}`;
+        const geocodeResponse = await fetch(geoCodeUrl, {
+            headers: {
+                'User-Agent': 'YourWeatherApp/1.0 (official.og.owolabi@gmail.com)' // Required by Nominatim
+            }
+        }); 
+
+        const geoCodeData = await geocodeResponse.json();
+        console.log(geoCodeData);
+        city.innerHTML = `${geoCodeData.address.city || geoCodeData.address.town || geoCodeData.address.village || "Unknown Location"}, ${geoCodeData.address.country}`;
     }
     catch (error) {
         console.log(error)
     }
 }
-console.log(getWeatherData())
+getWeatherData()
