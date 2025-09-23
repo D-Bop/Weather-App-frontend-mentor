@@ -297,16 +297,19 @@ header > h1{
 .forecast-container {
     display: flex;
     flex-direction: column;
+    gap: 3em;
     background-color: hsl(243, 27%, 20%);
     padding: 16px 10px;
     border-radius: 12px;
+    /* height: 165px; */
     
 }
 
 .day-forecast {
     display: flex;
     flex-direction: column;
-    /* justify-items: space-between; */
+    gap: 3em;
+    justify-items: space-around;
     align-items: center;
     /* gap: 3px; */
 }
