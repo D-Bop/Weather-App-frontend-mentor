@@ -13,6 +13,7 @@ const daysForecast = document.querySelectorAll(".day")
 const maxTemps = document.querySelectorAll(".max-temp")
 const minTemps = document.querySelectorAll(".min-temp")
 const dayIcon = document.querySelectorAll(".day-icon")
+const presentDayIcon = document.querySelector(".todays-icon")
 // console.log(maxTemps)
 // console.log(minTemps)
 
@@ -58,7 +59,7 @@ function getWeatherIcon(weatherCode) {
         96: "assets/images/icon-storm.webp",  // Thunderstorm with slight hail
         99: "assets/images/icon-storm.webp"   // Thunderstorm with heavy hail
     };
-    return weatherIcons[weatherCode] || "assets/images/icon-default.webp"; // Default icon if code not found
+    return weatherIcons[weatherCode]
 }
 
 
@@ -131,6 +132,12 @@ const getWeatherData = async() => {
             imgElement.alt = "Weather Icon";
             // console.log(imgElement.src=iconPath)
         })
+        // Displaying present day weather icon
+        const presentDayWeatherCode = weatherData.current.weather_code;
+        console.log(presentDayWeatherCode)
+        const currentIcon = getWeatherIcon(presentDayWeatherCode);
+        presentDayIcon.src = currentIcon;
+
     }
     catch (error) {
         console.log(error)
