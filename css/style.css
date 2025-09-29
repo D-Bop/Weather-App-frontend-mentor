@@ -41,8 +41,9 @@ button > img {
 .content {
     background-color: hsl(243, 27%, 20%);
     width: 214px;
-    height: 412px;
+    /* height: 412px; */
     padding: 6px 8px;
+    border: 2px hsl(243, 23%, 30%) solid;
     border-radius: 12px;
     margin-top: 10px;
     display: none;
@@ -63,15 +64,28 @@ button > img {
     text-align: left;
 }
 
+
 .temperature > p {
     color: hsl(240, 6%, 70%);
     font-size: 14px;
-    margin-bottom: 8px;
+    
+    padding: 10px 8px;
 }
 
-/* .temps > p {
+.temps {
+    margin-top: 1px;
+}
+
+.temps > p {
+    margin-top: 1px;
     padding: 10px 8px;
-} */
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    background-color: hsl(243, 23%, 30%);
+}
 
 header {
     margin-top: 50px;
@@ -95,7 +109,6 @@ header > h1{
     display: grid;
     grid-template-columns: 3fr 1fr;
     grid-column-gap: 1em;
-    /* background-color: indianred; */
     height: 56px;
     margin-top: 2em;
 }
@@ -203,7 +216,6 @@ header > h1{
 .location {
     justify-self: center;
     align-self: center;
-    /* background-color: indianred; */
     width: 100%;
 }
 
@@ -221,7 +233,6 @@ header > h1{
 
 .weather {
     display: flex;
-    /* background-color: tomato; */
     justify-self: center;
     align-self: center;
     align-items: center;
@@ -236,11 +247,9 @@ header > h1{
     width: 90px;
     justify-self: center;
     align-self: center;
-    /* background-color: turquoise; */
 }
 
 .weather > h1 {
-    /* background-color: lightgreen; */
     /* margin-right: 2em; */
     font-family: Bricolage Grotesque, sans-serif;
     font-weight: 300;
@@ -253,14 +262,12 @@ header > h1{
     grid-template-columns: 25% 25% 25% 25%;
     grid-gap: 1em;
     margin-top: 1em;
-    /* background-color: tomato; */
 }
 
 .container1 {
     background-color: hsl(243, 27%, 20%);
     border-radius: 12px;
     padding: 20px;
-    /* background-color: transparent; */
 }
 
 .container1 > h3 {
@@ -291,7 +298,6 @@ header > h1{
     width: 88%;
     margin-bottom: 0px;
     margin-top: 2em;
-    /* background-color: tomato; */
 }
 
 .forecast-container {
@@ -301,7 +307,6 @@ header > h1{
     background-color: hsl(243, 27%, 20%);
     padding: 16px 10px;
     border-radius: 12px;
-    /* height: 165px; */
     
 }
 
@@ -347,23 +352,33 @@ header > h1{
     flex-direction: column;
     gap: 1em; */
     display: none;
-    width: 66%;
-    margin-top: 3em;
+    width: 64%;
+    margin-top: 2em;
     position: absolute;
     right: 0%;
-    background-color: hsl(243, 96%, 9%);
-    color: indianred;
+    background-color: hsl(243, 27%, 20%);
+    padding: 1em;
+    border: 1px hsl(243, 23%, 30%) solid;
+    border-radius: 20px;
 }
 
+
 .days-dropdown > button {
-    background-color: hsl(243, 23%, 24%);
+    background-color: transparent;
     border: none;
+    border-radius: 8px;
     color: hsl(0, 0%, 100%);
     font-family: "Outfit", sans-serif;
     font-size: 16px;
     padding: 12px 16px;
     width: 100%;
     text-align: left;
+
+    /* margin-top: 1em; */
+}
+
+.days-dropdown > button:hover {
+    background-color: hsl(243, 23%, 24%);
 }
 
 .hourly-forecast-btn > button {
@@ -513,7 +528,7 @@ header > h1{
         margin-top: 1em;
     }
 }
-
+/* Styling for mobile */
 @media screen and (max-width: 450px) {
     body {
         width: 100%;
@@ -609,6 +624,11 @@ header > h1{
     }
 
     .hourly-details {
+        margin-top: 1em;
+    }
+
+    .days-dropdown {
+        width: 60%;
         margin-top: 1em;
     }
 }
