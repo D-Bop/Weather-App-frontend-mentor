@@ -138,6 +138,6 @@ const getUserLocation = () => {
     }
 }
 
-getUserLocation();
+// getUserLocation();
 
-// window.onload = getUserLocation;
+window.onload = getUserLocation;
