@@ -105,7 +105,7 @@ header > h1{
 .search {
     margin: auto;
     text-align: center;
-    width: 40%;
+    width: 50%;
     display: grid;
     grid-template-columns: 3fr 1fr;
     grid-column-gap: 1em;
@@ -303,7 +303,7 @@ header > h1{
 .forecast-container {
     display: flex;
     flex-direction: column;
-    gap: 3em;
+    gap: 2em;
     background-color: hsl(243, 27%, 20%);
     padding: 16px 10px;
     border-radius: 12px;
