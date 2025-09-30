@@ -14,24 +14,19 @@ const maxTemps = document.querySelectorAll(".max-temp")
 const minTemps = document.querySelectorAll(".min-temp")
 const dayIcon = document.querySelectorAll(".day-icon")
 const presentDayIcon = document.querySelector(".todays-icon")
-// console.log(maxTemps)
-// console.log(minTemps)
 
 let dateObj = new Date();
 let month = months[dateObj.getUTCMonth()];
 let year = dateObj.getUTCFullYear();
 const dayName = days[dateObj.getDay()];
-// console.log(dayName);
 date.innerHTML = `${dayName}, ${month} ${year}`;
 
 
 function toggleDropdown() { 
-    console.log("button clicked")
     dropDownContent.classList.toggle("hide")
 }
 
 function daysDropDown() {
-    console.log("button clicked")
     daysList.classList.toggle("hide")
 }
 
@@ -63,10 +58,10 @@ function getWeatherIcon(weatherCode) {
 }
 
 
-const getWeatherData = async() => {
+const getWeatherData = async(lat, lon) => {
     try {
         const cityName = document.querySelector(".search-bar").value;
-        const weatherDataFetch = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=6.4541&longitude=3.3947&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,wind_speed_10m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain,showers,snowfall&current=wind_speed_10m,snowfall,showers,rain,relative_humidity_2m,precipitation,temperature_2m,weather_code`, 
+        const weatherDataFetch = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,wind_speed_10m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain,showers,snowfall&current=wind_speed_10m,snowfall,showers,rain,relative_humidity_2m,precipitation,temperature_2m,weather_code`, 
             {
                 headers: {
                     Accept: "application/json"
@@ -74,10 +69,6 @@ const getWeatherData = async() => {
             }
         );
         const weatherData = await weatherDataFetch.json();
-        console.log(weatherData)
-        console.log(weatherData.daily.time)
-        console.log(weatherData.daily.temperature_2m_max) 
-        console.log(weatherData.daily.temperature_2m_min) 
 
         // reverse geocoding to get city name from lat and long
         const geoCodeUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${weatherData.latitude}&lon=${weatherData.longitude}`;
@@ -88,11 +79,9 @@ const getWeatherData = async() => {
         }); 
 
         const geoCodeData = await geocodeResponse.json();
-        // console.log(geoCodeData);
         // displaying api data on the page
         city.innerHTML = `${geoCodeData.address.city || geoCodeData.address.town || geoCodeData.address.village || "Unknown Location"}, ${geoCodeData.address.country}`;
         temperature.forEach ((temp) => { 
-            // console.log(temp)
             temp.innerHTML = `${Math.round(weatherData.current.temperature_2m)}°`
         });
         humidity.innerHTML = `${weatherData.current.relative_humidity_2m}${weatherData.current_units.relative_humidity_2m}`
@@ -100,7 +89,6 @@ const getWeatherData = async() => {
         precipitation.innerHTML = `${weatherData.current.precipitation} ${weatherData.current_units.precipitation}`
         // Getting API DATE DATA and displaying day names
         const apiDates = weatherData.daily.time;
-        console.log(apiDates)
         apiDates.forEach((apiDate, index) => {
             const date = new Date(apiDate);
             const dayName = date.toLocaleString('en-US', { weekday: 'short' });
@@ -110,23 +98,18 @@ const getWeatherData = async() => {
         // Getting API TEMP DATA and displaying day temps
         // Max temps
         const apiMaxTemps = weatherData.daily.temperature_2m_max;
-        console.log(apiMaxTemps)
         apiMaxTemps.forEach((apiMaxTemp, index) => { 
             maxTemps[index].innerHTML = `${Math.round(apiMaxTemp)}°`
         })
         // Min temps
         const apiMinTemps = weatherData.daily.temperature_2m_min;
-        console.log(apiMinTemps)
         apiMinTemps.forEach((apiMinTemp, index) => {
             minTemps[index].innerHTML = `${Math.round(apiMinTemp)}°`
         })
         // Getting API WEATHER CODE DATA and displaying day weather icons
         const apiWeatherCodes = weatherData.daily.weather_code;
-        console.log(apiWeatherCodes)
-        console.log(dayIcon.length)
         apiWeatherCodes.forEach((apiWeatherCode, index) => {
             const iconPath = getWeatherIcon(apiWeatherCode);
-            console.log(iconPath);
             const imgElement = dayIcon[index]
             imgElement.src = iconPath;
             imgElement.alt = "Weather Icon";
@@ -134,7 +117,6 @@ const getWeatherData = async() => {
         })
         // Displaying present day weather icon
         const presentDayWeatherCode = weatherData.current.weather_code;
-        console.log(presentDayWeatherCode)
         const currentIcon = getWeatherIcon(presentDayWeatherCode);
         presentDayIcon.src = currentIcon;
 
@@ -143,4 +125,19 @@ const getWeatherData = async() => {
         console.log(error)
     }
 }
-getWeatherData()
+
+const getUserLocation = () => {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            let lat = position.coords.latitude;
+            let long = position.coords.longitude;
+            getWeatherData(lat, long)
+        })
+    } else {
+        console.log("Geolocation is not supported by this browser.")
+    }
+}
+
+getUserLocation();
+
+// window.onload = getUserLocation;
