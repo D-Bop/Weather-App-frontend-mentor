@@ -23,6 +23,8 @@ let year = dateObj.getUTCFullYear();
 const dayName = days[dateObj.getDay()];
 date.innerHTML = `${dayName}, ${month} ${year}`;
 const currentHour = dateObj.getHours();
+const currentDate =dateObj.toISOString().split("T")[0];
+console.log(currentDate)
 console.log(currentHour)
 daysList.forEach((dayBtn, index) => {
     dayBtn.innerHTML = days[index]
@@ -132,22 +134,59 @@ const getWeatherData = async(lat, lon) => {
         // Displaying hourly temperature.
         // console.log(weatherData.hourly.time)
         const hourlyTime = weatherData.hourly.time;
+        const hourlyTemps =weatherData.hourly.temperature_2m;
+        const hourlyWeatherCodes = weatherData.hourly.weather_code;
         console.log(hourlyTime)
+        console.log(hourlyTemps)
+        console.log(hourlyWeatherCodes)
 
-        hourlyTime.forEach((time, index) => {
-            // console.log(`time: ${timeStr} and index: ${index}`)
-            const timeStr = time.split("T")[1]
-            const dayStr = time.split("T")[0]
-            const date = new Date(dayStr);
-            const hourlyDayName = date.toLocaleString('en-US', { weekday: 'long' });
+        // creating an array for filtered data
+        let filteredTimes = []; 
+        let filteredTemps = [];
+        let filteredWeatherCodes = [];
 
-            // console.log(timeStr)
-            // console.log(dayName)
-            daysList.innerHTML = `${hourlyDayName}`
-            // console.log(`${index}: date: ${dayName} at hour: ${timeStr}`)
+        // Filtering present day data
 
-        })
+        if(Array.isArray(hourlyTime)) {
+            hourlyTime.forEach((time, index) => {
+                if(typeof time == "string") {
+                    const timeStr = time.split("T")[1] //getting the time part of the iso date string
+                    const dayStr = time.split("T")[0] // getting the date part of the iso date string
+                    if(dayStr === currentDate) {
+                        filteredTimes.push(timeStr) //pushing present day's data to the array
+                        filteredTemps.push(hourlyTemps[index])
+                        filteredWeatherCodes.push(hourlyWeatherCodes[index])
+                    }
+                } 
+            })
+            console.log(`Filtered Times: ${filteredTimes}`)
+            console.log(`Filtered Temps: ${filteredTemps}`)
+            console.log(`Filtered WeatherCode: ${filteredWeatherCodes}`) 
+        }else{
+            console.log("Hourly time is invalid")
+        }
 
+        // Getting the next 8 hours from the present date data
+        const next8hours = filteredTimes.slice(currentHour, currentHour + 8);
+        const next8hoursTemps = filteredTemps.slice(currentHour, currentHour + 8);
+        const next8hoursWeatherCode = filteredWeatherCodes.slice(currentHour, currentHour + 8);
+        console.log(next8hours)
+        console.log(next8hoursTemps)
+        console.log(next8hoursWeatherCode)
+        // Displaying the next 8 hours data on the page
+        if(next8hours.length === 8) {
+            const hourlyBoxes = document.querySelectorAll(".box-1");
+            hourlyBoxes.forEach((box, index) => {
+                const timeElement = box.querySelector(".hour");
+                const tempElement = box.querySelector(".time-temp p");
+                const iconElement = box.querySelector("img");
+                timeElement.innerHTML = next8hours[index]
+                tempElement.innerHTML = `${Math.round(next8hoursTemps[index])}°` 
+                const iconPath = getWeatherIcon(next8hoursWeatherCode[index]);
+                iconElement.src = iconPath;
+                iconElement.alt = "Weather Icon";
+            })
+        }
 
 
     }
@@ -171,3 +210,5 @@ const getUserLocation = () => {
 // getUserLocation();
 
 window.onload = getUserLocation;
+
+
