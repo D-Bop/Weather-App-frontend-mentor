@@ -5,7 +5,9 @@ const humidity = document.querySelector(".humidity")
 const windSpeed = document.querySelector(".wind-speed")
 const precipitation = document.querySelector(".precipitation")
 const dropDownContent = document.querySelector(".content")
-const daysList = document.querySelector(".days-dropdown")
+const daysDropdown = document.querySelector(".days-dropdown")
+const daysList = document.querySelectorAll(".days-btn")
+const currentHourlyDate = document.querySelector(".hourly-date")
 const date = document.querySelector(".date")
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -20,14 +22,20 @@ let month = months[dateObj.getUTCMonth()];
 let year = dateObj.getUTCFullYear();
 const dayName = days[dateObj.getDay()];
 date.innerHTML = `${dayName}, ${month} ${year}`;
+const currentHour = dateObj.getHours();
+console.log(currentHour)
+daysList.forEach((dayBtn, index) => {
+    dayBtn.innerHTML = days[index]
+})
 
 
 function toggleDropdown() { 
     dropDownContent.classList.toggle("hide")
+    // daysList.classList.toggle("hide")
 }
 
 function daysDropDown() {
-    daysList.classList.toggle("hide")
+    daysDropdown.classList.toggle("hide")
 }
 
 function getWeatherIcon(weatherCode) {
@@ -57,11 +65,12 @@ function getWeatherIcon(weatherCode) {
     return weatherIcons[weatherCode]
 }
 
+currentHourlyDate.innerHTML = `${dayName}`
 
 const getWeatherData = async(lat, lon) => {
     try {
         const cityName = document.querySelector(".search-bar").value;
-        const weatherDataFetch = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,wind_speed_10m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain,showers,snowfall&current=wind_speed_10m,snowfall,showers,rain,relative_humidity_2m,precipitation,temperature_2m,weather_code`, 
+        const weatherDataFetch = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,wind_speed_10m,relative_humidity_2m,apparent_temperature,precipitation_probability,rain,showers,snowfall,weather_code&current=wind_speed_10m,snowfall,showers,rain,relative_humidity_2m,precipitation,temperature_2m,weather_code`, 
             {
                 headers: {
                     Accept: "application/json"
@@ -69,6 +78,7 @@ const getWeatherData = async(lat, lon) => {
             }
         );
         const weatherData = await weatherDataFetch.json();
+        console.log(weatherData)
 
         // reverse geocoding to get city name from lat and long
         const geoCodeUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${weatherData.latitude}&lon=${weatherData.longitude}`;
@@ -119,6 +129,26 @@ const getWeatherData = async(lat, lon) => {
         const presentDayWeatherCode = weatherData.current.weather_code;
         const currentIcon = getWeatherIcon(presentDayWeatherCode);
         presentDayIcon.src = currentIcon;
+        // Displaying hourly temperature.
+        // console.log(weatherData.hourly.time)
+        const hourlyTime = weatherData.hourly.time;
+        console.log(hourlyTime)
+
+        hourlyTime.forEach((time, index) => {
+            // console.log(`time: ${timeStr} and index: ${index}`)
+            const timeStr = time.split("T")[1]
+            const dayStr = time.split("T")[0]
+            const date = new Date(dayStr);
+            const hourlyDayName = date.toLocaleString('en-US', { weekday: 'long' });
+
+            // console.log(timeStr)
+            // console.log(dayName)
+            daysList.innerHTML = `${hourlyDayName}`
+            // console.log(`${index}: date: ${dayName} at hour: ${timeStr}`)
+
+        })
+
+
 
     }
     catch (error) {
