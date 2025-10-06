@@ -152,10 +152,12 @@ const getWeatherData = async(lat, lon) => {
                 if(typeof time == "string") {
                     const timeStr = time.split("T")[1] //getting the time part of the iso date string
                     const dayStr = time.split("T")[0] // getting the date part of the iso date string
+                    // console.log(dayStr)
                     if(dayStr === currentDate) {
                         filteredTimes.push(timeStr) //pushing present day's data to the array
                         filteredTemps.push(hourlyTemps[index])
                         filteredWeatherCodes.push(hourlyWeatherCodes[index])
+                        // console.log(filteredTimes)
                     }
                 } 
             })
@@ -187,8 +189,6 @@ const getWeatherData = async(lat, lon) => {
                 iconElement.alt = "Weather Icon";
             })
         }
-
-
     }
     catch (error) {
         console.log(error)
