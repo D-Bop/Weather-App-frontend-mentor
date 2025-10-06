@@ -24,11 +24,6 @@ const dayName = days[dateObj.getDay()];
 date.innerHTML = `${dayName}, ${month} ${year}`;
 const currentHour = dateObj.getHours();
 const currentDate =dateObj.toISOString().split("T")[0];
-console.log(currentDate)
-console.log(currentHour)
-daysList.forEach((dayBtn, index) => {
-    dayBtn.innerHTML = days[index]
-})
 
 
 function toggleDropdown() { 
@@ -132,13 +127,23 @@ const getWeatherData = async(lat, lon) => {
         const currentIcon = getWeatherIcon(presentDayWeatherCode);
         presentDayIcon.src = currentIcon;
         // Displaying hourly temperature.
+
+
+        // displaying days drop down in houly list
+        daysList.forEach(() => {
+            apiDates.forEach((apiDate, index) => {
+                const date = new Date(apiDate);
+                const dayName = date.toLocaleString('en-US', { weekday: 'long' });
+                // console.log(dayName);
+                daysList[index].innerHTML = dayName;
+            })
+        })
+
+
         // console.log(weatherData.hourly.time)
         const hourlyTime = weatherData.hourly.time;
         const hourlyTemps =weatherData.hourly.temperature_2m;
         const hourlyWeatherCodes = weatherData.hourly.weather_code;
-        console.log(hourlyTime)
-        console.log(hourlyTemps)
-        console.log(hourlyWeatherCodes)
 
         // creating an array for filtered data
         let filteredTimes = []; 
@@ -161,9 +166,6 @@ const getWeatherData = async(lat, lon) => {
                     }
                 } 
             })
-            console.log(`Filtered Times: ${filteredTimes}`)
-            console.log(`Filtered Temps: ${filteredTemps}`)
-            console.log(`Filtered WeatherCode: ${filteredWeatherCodes}`) 
         }else{
             console.log("Hourly time is invalid")
         }
@@ -172,9 +174,6 @@ const getWeatherData = async(lat, lon) => {
         const next8hours = filteredTimes.slice(currentHour, currentHour + 8);
         const next8hoursTemps = filteredTemps.slice(currentHour, currentHour + 8);
         const next8hoursWeatherCode = filteredWeatherCodes.slice(currentHour, currentHour + 8);
-        console.log(next8hours)
-        console.log(next8hoursTemps)
-        console.log(next8hoursWeatherCode)
         // Displaying the next 8 hours data on the page
         if(next8hours.length === 8) {
             const hourlyBoxes = document.querySelectorAll(".box-1");
@@ -189,11 +188,62 @@ const getWeatherData = async(lat, lon) => {
                 iconElement.alt = "Weather Icon";
             })
         }
+        // Working on selected date dropdown
+        daysList.forEach((dayBtn, index) => {
+            dayBtn.onclick = () => {
+                const selectedDate = apiDates[index];
+                console.log(selectedDate)
+                currentHourlyDate.innerHTML = getWeekday(apiDates[index]);
+                if(currentHourlyDate.innerHTML) {
+                    console.log(`Todays date selected is ${currentHourlyDate.innerHTML}`)
+                    // Filtering selected day data
+                    let selectedDayTimes = [];
+                    let selectedDayTemps = [];
+                    let selectedDayWeatherCodes = [];
+                    if(Array.isArray(hourlyTime)) {
+                        hourlyTime.forEach((time, index) => {
+                            if(typeof time == "string") {
+                                const timeStr = time.split("T")[1] //getting the time part of the iso date string
+                                const dayStr = time.split("T")[0] // getting the date part of the iso date string
+                                if(dayStr === selectedDate){
+                                    selectedDayTimes.push(timeStr) //pushing present day's data to the array
+                                    selectedDayTemps.push(hourlyTemps[index])
+                                    selectedDayWeatherCodes.push(hourlyWeatherCodes[index])
+                                }
+                            }
+                        })
+                    }
+                    const selectedDayNext8Hours = selectedDayTimes.slice(currentHour, currentHour + 8);
+                    const selectedDayNext8HoursTemps = selectedDayTemps.slice(currentHour, currentHour + 8);
+                    const selectedDayNext8HoursWeatherCodes = selectedDayWeatherCodes.slice(currentHour, currentHour + 8);
+                    // Displaying dropdown selected day data
+                    const hourlyBoxes = document.querySelectorAll(".box-1");
+                    hourlyBoxes.forEach((box, index) => {
+                        const timeElement = box.querySelector(".hour");
+                        const tempElement = box.querySelector(".time-temp p");
+                        const iconElement = box.querySelector("img");
+                        timeElement.innerHTML = selectedDayNext8Hours[index]
+                        tempElement.innerHTML = `${Math.round(selectedDayNext8HoursTemps[index])}°` 
+                        const iconPath = getWeatherIcon(selectedDayNext8HoursWeatherCodes[index]);
+                        iconElement.src = iconPath;
+                        iconElement.alt = "Weather Icon";
+                    })
+                }
+            }
+        })
     }
     catch (error) {
         console.log(error)
     }
 }
+
+// A function that returns week day from a date string
+
+function getWeekday(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { weekday: 'long' });
+}
+
 
 const getUserLocation = () => {
     if(navigator.geolocation) {
